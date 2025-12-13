@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Scene from './components/Scene';
 import UIOverlay from './components/UIOverlay';
@@ -6,7 +7,10 @@ import { LamellaData } from './types';
 
 const App: React.FC = () => {
   // Animation & Transform
-  const [speed, setSpeed] = useState<number>(DEFAULTS.speed);
+  const [rotationSpeedX, setRotationSpeedX] = useState<number>(DEFAULTS.rotationSpeedX);
+  const [rotationSpeedY, setRotationSpeedY] = useState<number>(DEFAULTS.rotationSpeedY);
+  const [rotationSpeedZ, setRotationSpeedZ] = useState<number>(DEFAULTS.rotationSpeedZ);
+
   const [expansion, setExpansion] = useState<number>(DEFAULTS.expansion);
   const [autoAnimate, setAutoAnimate] = useState<boolean>(DEFAULTS.autoAnimate);
   const [animationType, setAnimationType] = useState<'breath' | 'wave'>(DEFAULTS.animationType);
@@ -19,7 +23,6 @@ const App: React.FC = () => {
   const [tiltX, setTiltX] = useState<number>(DEFAULTS.tiltX);
   const [tiltY, setTiltY] = useState<number>(DEFAULTS.tiltY);
   const [tiltZ, setTiltZ] = useState<number>(DEFAULTS.tiltZ);
-  const [rotationDirection, setRotationDirection] = useState<number>(DEFAULTS.rotationDirection);
   const [backgroundColor, setBackgroundColor] = useState<string>(DEFAULTS.backgroundColor);
 
   // Color Animation
@@ -129,7 +132,10 @@ const App: React.FC = () => {
       
       <div className="absolute inset-0 z-0">
         <Scene 
-          speed={speed} 
+          rotationSpeedX={rotationSpeedX}
+          rotationSpeedY={rotationSpeedY}
+          rotationSpeedZ={rotationSpeedZ}
+          
           expansion={expansion} 
           autoAnimate={autoAnimate}
           animationType={animationType}
@@ -141,7 +147,6 @@ const App: React.FC = () => {
           tiltX={tiltX}
           tiltY={tiltY}
           tiltZ={tiltZ}
-          rotationDirection={rotationDirection}
           
           colorSpeed={colorSpeed}
           colorDirection={colorDirection}
@@ -181,8 +186,13 @@ const App: React.FC = () => {
 
       <div className="relative z-10 h-full">
         <UIOverlay
-          speed={speed}
-          setSpeed={setSpeed}
+          rotationSpeedX={rotationSpeedX}
+          setRotationSpeedX={setRotationSpeedX}
+          rotationSpeedY={rotationSpeedY}
+          setRotationSpeedY={setRotationSpeedY}
+          rotationSpeedZ={rotationSpeedZ}
+          setRotationSpeedZ={setRotationSpeedZ}
+          
           expansion={expansion}
           setExpansion={setExpansion}
           autoAnimate={autoAnimate}
@@ -205,8 +215,6 @@ const App: React.FC = () => {
           setTiltY={setTiltY}
           tiltZ={tiltZ}
           setTiltZ={setTiltZ}
-          rotationDirection={rotationDirection}
-          setRotationDirection={setRotationDirection}
           
           colorSpeed={colorSpeed}
           setColorSpeed={setColorSpeed}

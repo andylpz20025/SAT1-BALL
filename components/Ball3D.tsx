@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Group, DoubleSide, MathUtils, Color, MeshPhysicalMaterial } from 'three';
@@ -28,7 +29,10 @@ declare global {
 }
 
 interface Ball3DProps {
-  speed: number;
+  rotationSpeedX: number;
+  rotationSpeedY: number;
+  rotationSpeedZ: number;
+
   expansion: number;
   autoAnimate: boolean;
   animationType: 'breath' | 'wave';
@@ -40,7 +44,6 @@ interface Ball3DProps {
   tiltX: number;
   tiltY: number;
   tiltZ: number;
-  rotationDirection: number;
   colorSpeed: number;
   colorDirection: number;
   lamellaWidth: number;
@@ -67,7 +70,8 @@ interface Ball3DProps {
 }
 
 const Ball3D: React.FC<Ball3DProps> = ({ 
-    speed, expansion, autoAnimate, animationType, hoverEffect, scale, positionX, positionY, positionZ, tiltX, tiltY, tiltZ, rotationDirection,
+    rotationSpeedX, rotationSpeedY, rotationSpeedZ,
+    expansion, autoAnimate, animationType, hoverEffect, scale, positionX, positionY, positionZ, tiltX, tiltY, tiltZ,
     colorSpeed, colorDirection,
     lamellaWidth, verticalStart, verticalEnd, lamellaCount, lamellaList, coreLamellaList, lamellaDepth,
     segmentOuterRadius, segmentInnerRadius,
@@ -110,9 +114,12 @@ const Ball3D: React.FC<Ball3DProps> = ({
   const tempColorB = useRef(new Color());
 
   useFrame((state) => {
-    // 1. Physical Rotation
+    // 1. Physical Rotation (X, Y, Z support)
     if (innerSpinGroupRef.current) {
-        innerSpinGroupRef.current.rotation.y += 0.01 * speed * rotationDirection;
+        // Multiplier 0.01 keeps the values in the UI (0-5) manageable
+        innerSpinGroupRef.current.rotation.x += 0.01 * rotationSpeedX;
+        innerSpinGroupRef.current.rotation.y += 0.01 * rotationSpeedY;
+        innerSpinGroupRef.current.rotation.z += 0.01 * rotationSpeedZ;
     }
 
     // 2. Smooth Color Rotation (Lauflicht "wie ein Drehen")
@@ -232,7 +239,6 @@ const Ball3D: React.FC<Ball3DProps> = ({
                             autoAnimate={false} // Core geometry doesn't breathe
                             animationType="breath"
                             hoverEffect={false}
-                            speed={0}
                             setHoveredIndex={() => {}} // No hover interaction for core
                             onMaterialReady={(mat) => coreMaterialRefs.current[i] = mat}
                         />
@@ -269,7 +275,6 @@ const Ball3D: React.FC<Ball3DProps> = ({
                         autoAnimate={autoAnimate}
                         animationType={animationType}
                         hoverEffect={hoverEffect}
-                        speed={speed}
                         setHoveredIndex={setHoveredIndex}
                         onMaterialReady={(mat) => materialRefs.current[i] = mat}
                     />
@@ -301,7 +306,6 @@ interface LamellaProps {
     autoAnimate: boolean;
     animationType: 'breath' | 'wave';
     hoverEffect: boolean;
-    speed: number;
     setHoveredIndex: (i: number | null) => void;
     onMaterialReady: (mat: MeshPhysicalMaterial) => void;
 }
@@ -310,7 +314,7 @@ const Lamella: React.FC<LamellaProps> = ({
     index, total, color, opacity, roughness, metalness, clearcoat, 
     transmission, thickness, iridescence, wireframe,
     phiLength, thetaStart, thetaLength, outerRadius, innerRadius,
-    baseExpansion, autoAnimate, animationType, hoverEffect, speed,
+    baseExpansion, autoAnimate, animationType, hoverEffect,
     setHoveredIndex, onMaterialReady
 }) => {
     const movingGroupRef = useRef<Group>(null);

@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2 } from 'lucide-react';
+import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D } from 'lucide-react';
 import { ControlPanelProps } from '../types';
 import { DEFAULTS } from '../constants';
 
@@ -20,7 +21,10 @@ declare global {
 }
 
 const UIOverlay: React.FC<ControlPanelProps> = ({
-  speed, setSpeed,
+  rotationSpeedX, setRotationSpeedX,
+  rotationSpeedY, setRotationSpeedY,
+  rotationSpeedZ, setRotationSpeedZ,
+
   expansion, setExpansion,
   autoAnimate, setAutoAnimate,
   animationType, setAnimationType,
@@ -32,7 +36,6 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
   tiltX, setTiltX,
   tiltY, setTiltY,
   tiltZ, setTiltZ,
-  rotationDirection, setRotationDirection,
   
   colorSpeed, setColorSpeed,
   colorDirection, setColorDirection,
@@ -76,10 +79,11 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
     
   // Reset Handlers
   const resetGeneral = () => {
-      setSpeed(DEFAULTS.speed);
+      setRotationSpeedX(DEFAULTS.rotationSpeedX);
+      setRotationSpeedY(DEFAULTS.rotationSpeedY);
+      setRotationSpeedZ(DEFAULTS.rotationSpeedZ);
       setExpansion(DEFAULTS.expansion);
       setAutoAnimate(DEFAULTS.autoAnimate);
-      setRotationDirection(DEFAULTS.rotationDirection);
       setColorSpeed(DEFAULTS.colorSpeed);
       setColorDirection(DEFAULTS.colorDirection);
   };
@@ -158,24 +162,47 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
           <h2 className="text-white font-semibold">Konfiguration</h2>
         </div>
 
-        {/* Section: General */}
+        {/* Section: General / Rotation Animation */}
         <div className="space-y-4 mb-6 relative">
             <button onClick={resetGeneral} className="absolute -top-1 right-0 text-slate-500 hover:text-white transition-colors" title="Abschnitt zurücksetzen"><Undo2 className="w-4 h-4" /></button>
-            <div>
-              <div className="flex justify-between text-xs text-slate-300 mb-1">
-                <span>DREHUNG (Physisch)</span>
-              </div>
-              <div className="flex gap-2 items-center">
-                  <button 
-                    onClick={() => setRotationDirection(rotationDirection * -1)}
-                    className="p-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
-                    title="Richtung wechseln"
-                  >
-                     {rotationDirection > 0 ? <RotateCw className="w-4 h-4 text-cyan-400"/> : <RotateCcw className="w-4 h-4 text-orange-400"/>}
-                  </button>
-                  <input type="range" min="0" max="5" step="0.1" value={speed} onChange={(e) => setSpeed(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
-                  <input type="number" step="0.1" value={speed} onChange={(e) => setSpeed(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-xs text-white border border-slate-600 rounded px-1 py-1 text-center font-mono" />
-              </div>
+            <div className="bg-slate-800/30 p-2 rounded border border-slate-700/30">
+                <div className="flex items-center gap-2 mb-2">
+                    <Move3D className="w-4 h-4 text-cyan-400" />
+                    <span className="text-xs font-bold text-slate-200">ANIMATION (Drehung)</span>
+                </div>
+                
+                {/* Y Axis (Heading) - Main */}
+                <div className="mb-2">
+                    <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                        <span>H-Winkel (Heading / Y)</span>
+                        <span className="font-mono">{rotationSpeedY.toFixed(1)}</span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <input type="range" min="-5" max="5" step="0.1" value={rotationSpeedY} onChange={(e) => setRotationSpeedY(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                    </div>
+                </div>
+
+                {/* X Axis (Pitch) */}
+                <div className="mb-2">
+                    <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                        <span>P-Winkel (Pitch / X)</span>
+                        <span className="font-mono">{rotationSpeedX.toFixed(1)}</span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                         <input type="range" min="-5" max="5" step="0.1" value={rotationSpeedX} onChange={(e) => setRotationSpeedX(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                    </div>
+                </div>
+
+                {/* Z Axis (Bank) */}
+                <div>
+                    <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                        <span>B-Winkel (Bank / Z)</span>
+                        <span className="font-mono">{rotationSpeedZ.toFixed(1)}</span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                         <input type="range" min="-5" max="5" step="0.1" value={rotationSpeedZ} onChange={(e) => setRotationSpeedZ(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                    </div>
+                </div>
             </div>
 
              {/* New Section: Color Animation */}

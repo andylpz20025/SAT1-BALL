@@ -1,3 +1,4 @@
+
 // The colors observed in the reference image (Sat.1 style ball)
 // Order: Blue, Purple, Red, Orange, Yellow, Light Green, Cyan/LightBlue
 export const BALL_COLORS = [
@@ -12,7 +13,10 @@ export const BALL_COLORS = [
 ];
 
 export const DEFAULTS = {
-  speed: 1.5,
+  rotationSpeedX: 0,
+  rotationSpeedY: 1.5,
+  rotationSpeedZ: 0,
+  
   expansion: 0.02,
   autoAnimate: true,
   animationType: 'breath' as const,
@@ -25,7 +29,6 @@ export const DEFAULTS = {
   tiltX: 0,
   tiltY: 0,
   tiltZ: 12, // Converted from 0.2 rad to approx 12 degrees
-  rotationDirection: 1,
   
   colorSpeed: 0,
   colorDirection: 1,

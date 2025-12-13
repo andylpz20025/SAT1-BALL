@@ -1,11 +1,16 @@
 
+
 export interface LamellaData {
   color: string;
   opacity: number;
 }
 
 export interface SphereProps {
-  speed: number;
+  // Rotation Animation Speeds per Axis
+  rotationSpeedX: number;
+  rotationSpeedY: number;
+  rotationSpeedZ: number;
+
   expansion: number;
   autoAnimate: boolean;
   animationType: 'breath' | 'wave';
@@ -17,7 +22,6 @@ export interface SphereProps {
   tiltX: number;
   tiltY: number;
   tiltZ: number;
-  rotationDirection: number; 
   
   colorSpeed: number;
   colorDirection: number; 
@@ -63,8 +67,13 @@ export interface SphereProps {
 }
 
 export interface ControlPanelProps {
-  speed: number;
-  setSpeed: (val: number) => void;
+  rotationSpeedX: number;
+  setRotationSpeedX: (val: number) => void;
+  rotationSpeedY: number;
+  setRotationSpeedY: (val: number) => void;
+  rotationSpeedZ: number;
+  setRotationSpeedZ: (val: number) => void;
+
   expansion: number;
   setExpansion: (val: number) => void;
   autoAnimate: boolean;
@@ -88,8 +97,6 @@ export interface ControlPanelProps {
   setTiltY: (val: number) => void;
   tiltZ: number;
   setTiltZ: (val: number) => void;
-  rotationDirection: number;
-  setRotationDirection: (val: number) => void;
   
   colorSpeed: number;
   setColorSpeed: (val: number) => void;
