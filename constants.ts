@@ -1,15 +1,16 @@
 
 // The colors observed in the reference image (Sat.1 style ball)
-// Order: Blue, Purple, Red, Orange, Yellow, Light Green, Cyan/LightBlue
+// Order provided by user
 export const BALL_COLORS = [
-  "#0057b8", // Deep Blue
-  "#800080", // Purple
-  "#c40030", // Red
-  "#ff7f00", // Orange
-  "#fecb00", // Yellow
-  "#78be20", // Light Green
-  "#00b5e2", // Cyan
-  "#ffffff"  // White filler is handled separately, but these are the main slices
+  "#C41259", // Dunkles Pink / Beere
+  "#E20074", // Magenta / Pink
+  "#EB6F0E", // Orange-Rot
+  "#F39200", // Gelb-Orange
+  "#FFED00", // Gelb
+  "#89BC27", // Hellgrün
+  "#008A45", // Dunkelgrün
+  "#009EE3", // Hellblau / Cyan
+  "#ffffff"  // White filler is handled separately
 ];
 
 export const DEFAULTS = {

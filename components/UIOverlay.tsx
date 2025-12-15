@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D } from 'lucide-react';
+import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D, Lock, Unlock } from 'lucide-react';
 import { ControlPanelProps } from '../types';
 import { DEFAULTS } from '../constants';
 
@@ -36,6 +36,10 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
   tiltX, setTiltX,
   tiltY, setTiltY,
   tiltZ, setTiltZ,
+  
+  lockTiltX, setLockTiltX,
+  lockTiltY, setLockTiltY,
+  lockTiltZ, setLockTiltZ,
   
   colorSpeed, setColorSpeed,
   colorDirection, setColorDirection,
@@ -140,9 +144,9 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
   };
   
   const resetOrientation = () => {
-      setTiltX(DEFAULTS.tiltX);
-      setTiltY(DEFAULTS.tiltY);
-      setTiltZ(DEFAULTS.tiltZ);
+      if (!lockTiltX) setTiltX(DEFAULTS.tiltX);
+      if (!lockTiltY) setTiltY(DEFAULTS.tiltY);
+      if (!lockTiltZ) setTiltZ(DEFAULTS.tiltZ);
   };
 
   return (
@@ -693,7 +697,7 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
             </div>
         </div>
         
-        {/* Section: Orientation (Restored) */}
+        {/* Section: Orientation (Locked Feature Added) */}
         <div className="border-t border-slate-700 pt-4 relative">
              <button onClick={resetOrientation} className="absolute top-4 right-0 text-slate-500 hover:text-white transition-colors" title="Abschnitt zurücksetzen"><Undo2 className="w-4 h-4" /></button>
              <div className="flex items-center gap-2 mb-3">
@@ -701,26 +705,44 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
                 <h3 className="text-sm font-bold text-white">Ausrichtung</h3>
             </div>
             <div className="flex gap-4">
-                <div className="w-1/3">
+                {/* X */}
+                <div className={`w-1/3 transition-opacity ${lockTiltX ? 'opacity-50' : 'opacity-100'}`}>
                     <div className="flex justify-between items-center mb-1">
-                        <label className="text-[10px] text-slate-400 block">Neigung X (°)</label>
-                        <input type="number" step="1" value={tiltX} onChange={(e) => setTiltX(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
+                        <label className="text-[10px] text-slate-400 block flex items-center gap-1">
+                           Neigung X 
+                           <button onClick={() => setLockTiltX(!lockTiltX)} className="focus:outline-none text-slate-500 hover:text-cyan-400">
+                             {lockTiltX ? <Lock size={10} /> : <Unlock size={10} />}
+                           </button>
+                        </label>
+                        <input disabled={lockTiltX} type="number" step="1" value={tiltX} onChange={(e) => setTiltX(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
                     </div>
-                    <input type="range" min="-360" max="360" step="1" value={tiltX} onChange={(e) => setTiltX(parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                    <input disabled={lockTiltX} type="range" min="-360" max="360" step="1" value={tiltX} onChange={(e) => setTiltX(parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 disabled:cursor-not-allowed" />
                 </div>
-                <div className="w-1/3">
+                {/* Y */}
+                <div className={`w-1/3 transition-opacity ${lockTiltY ? 'opacity-50' : 'opacity-100'}`}>
                     <div className="flex justify-between items-center mb-1">
-                        <label className="text-[10px] text-slate-400 block">Neigung Y (°)</label>
-                        <input type="number" step="1" value={tiltY} onChange={(e) => setTiltY(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
+                        <label className="text-[10px] text-slate-400 block flex items-center gap-1">
+                           Neigung Y
+                           <button onClick={() => setLockTiltY(!lockTiltY)} className="focus:outline-none text-slate-500 hover:text-cyan-400">
+                             {lockTiltY ? <Lock size={10} /> : <Unlock size={10} />}
+                           </button>
+                        </label>
+                        <input disabled={lockTiltY} type="number" step="1" value={tiltY} onChange={(e) => setTiltY(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
                     </div>
-                    <input type="range" min="-360" max="360" step="1" value={tiltY} onChange={(e) => setTiltY(parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                    <input disabled={lockTiltY} type="range" min="-360" max="360" step="1" value={tiltY} onChange={(e) => setTiltY(parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 disabled:cursor-not-allowed" />
                 </div>
-                <div className="w-1/3">
+                {/* Z */}
+                <div className={`w-1/3 transition-opacity ${lockTiltZ ? 'opacity-50' : 'opacity-100'}`}>
                     <div className="flex justify-between items-center mb-1">
-                        <label className="text-[10px] text-slate-400 block">Neigung Z (°)</label>
-                        <input type="number" step="1" value={tiltZ} onChange={(e) => setTiltZ(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
+                        <label className="text-[10px] text-slate-400 block flex items-center gap-1">
+                           Neigung Z
+                           <button onClick={() => setLockTiltZ(!lockTiltZ)} className="focus:outline-none text-slate-500 hover:text-cyan-400">
+                             {lockTiltZ ? <Lock size={10} /> : <Unlock size={10} />}
+                           </button>
+                        </label>
+                        <input disabled={lockTiltZ} type="number" step="1" value={tiltZ} onChange={(e) => setTiltZ(parseFloat(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
                     </div>
-                    <input type="range" min="-360" max="360" step="1" value={tiltZ} onChange={(e) => setTiltZ(parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                    <input disabled={lockTiltZ} type="range" min="-360" max="360" step="1" value={tiltZ} onChange={(e) => setTiltZ(parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 disabled:cursor-not-allowed" />
                 </div>
             </div>
         </div>

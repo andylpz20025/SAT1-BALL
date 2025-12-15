@@ -15,15 +15,6 @@ declare global {
       pointLight: any;
       group: any;
       directionalLight: any;
-      // HTML elements
-      div: any;
-      span: any;
-      h1: any;
-      h2: any;
-      h3: any;
-      button: any;
-      input: any;
-      label: any;
     }
   }
 }

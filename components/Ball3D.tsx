@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Group, DoubleSide, MathUtils, Color, MeshPhysicalMaterial } from 'three';
@@ -15,15 +14,6 @@ declare global {
       meshPhysicalMaterial: any;
       circleGeometry: any;
       ringGeometry: any;
-      // HTML elements
-      div: any;
-      span: any;
-      h1: any;
-      h2: any;
-      h3: any;
-      button: any;
-      input: any;
-      label: any;
     }
   }
 }

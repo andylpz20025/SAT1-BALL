@@ -20,9 +20,15 @@ const App: React.FC = () => {
   const [positionX, setPositionX] = useState<number>(DEFAULTS.positionX);
   const [positionY, setPositionY] = useState<number>(DEFAULTS.positionY);
   const [positionZ, setPositionZ] = useState<number>(DEFAULTS.positionZ);
+  
+  // Tilt (Orientation) with Locking
   const [tiltX, setTiltX] = useState<number>(DEFAULTS.tiltX);
   const [tiltY, setTiltY] = useState<number>(DEFAULTS.tiltY);
   const [tiltZ, setTiltZ] = useState<number>(DEFAULTS.tiltZ);
+  const [lockTiltX, setLockTiltX] = useState<boolean>(false);
+  const [lockTiltY, setLockTiltY] = useState<boolean>(false);
+  const [lockTiltZ, setLockTiltZ] = useState<boolean>(false);
+
   const [backgroundColor, setBackgroundColor] = useState<string>(DEFAULTS.backgroundColor);
 
   // Color Animation
@@ -209,12 +215,19 @@ const App: React.FC = () => {
           setPositionY={setPositionY}
           positionZ={positionZ}
           setPositionZ={setPositionZ}
+          
           tiltX={tiltX}
           setTiltX={setTiltX}
           tiltY={tiltY}
           setTiltY={setTiltY}
           tiltZ={tiltZ}
           setTiltZ={setTiltZ}
+          lockTiltX={lockTiltX}
+          setLockTiltX={setLockTiltX}
+          lockTiltY={lockTiltY}
+          setLockTiltY={setLockTiltY}
+          lockTiltZ={lockTiltZ}
+          setLockTiltZ={setLockTiltZ}
           
           colorSpeed={colorSpeed}
           setColorSpeed={setColorSpeed}

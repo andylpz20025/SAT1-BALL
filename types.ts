@@ -98,6 +98,14 @@ export interface ControlPanelProps {
   tiltZ: number;
   setTiltZ: (val: number) => void;
   
+  // Locking states for Tilt
+  lockTiltX: boolean;
+  setLockTiltX: (val: boolean) => void;
+  lockTiltY: boolean;
+  setLockTiltY: (val: boolean) => void;
+  lockTiltZ: boolean;
+  setLockTiltZ: (val: boolean) => void;
+
   colorSpeed: number;
   setColorSpeed: (val: number) => void;
   colorDirection: number;
