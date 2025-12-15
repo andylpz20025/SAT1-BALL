@@ -85,7 +85,7 @@ const Scene: React.FC<SceneProps> = (props) => {
         />
         
         {/* Post Processing Effects */}
-        <EffectComposer disableNormalPass>
+        <EffectComposer enableNormalPass={false}>
             {props.enableBloom && (
                 <Bloom 
                     luminanceThreshold={0.5} 

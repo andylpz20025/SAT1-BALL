@@ -2,14 +2,22 @@
 // The colors observed in the reference image (Sat.1 style ball)
 // Order provided by user
 export const BALL_COLORS = [
-  "#C41259", // Dunkles Pink / Beere
-  "#E20074", // Magenta / Pink
-  "#EB6F0E", // Orange-Rot
-  "#F39200", // Gelb-Orange
-  "#FFED00", // Gelb
-  "#89BC27", // Hellgrün
-  "#008A45", // Dunkelgrün
-  "#009EE3", // Hellblau / Cyan
+  "#93278F", // Rot-Violett
+  "#662D91", // Violett
+  "#2E3192", // Dunkelblau
+  "#0054A6", // Mittelblau
+  "#0071BC", // Blau-Cyan
+  "#00AEEF", // Cyan
+  "#00A99D", // Türkis
+  "#00A651", // Dunkelgrün
+  "#8DC63F", // Hellgrün
+  "#D9E021", // Gelb-Grün
+  "#FFF200", // Gelb
+  "#FBB03B", // Gold-Gelb
+  "#F7941D", // Orange
+  "#F15A24", // Hellrot
+  "#ED1C24", // Rot
+  "#BE1E2D", // Dunkelrot
   "#ffffff"  // White filler is handled separately
 ];
 
@@ -27,21 +35,23 @@ export const DEFAULTS = {
   positionX: 0,
   positionY: 0,
   positionZ: 0,
-  tiltX: 0,
+  
+  // Orientation defaults
+  tiltX: -45,
   tiltY: 0,
-  tiltZ: 12, // Converted from 0.2 rad to approx 12 degrees
+  tiltZ: -30,
   
   colorSpeed: 0,
   colorDirection: 1,
   
-  lamellaWidth: 40,
-  verticalStart: 90,
-  verticalEnd: -90,
-  lamellaCount: 7,
-  lamellaDepth: 0.01,
+  lamellaWidth: 15,
+  verticalStart: 85,
+  verticalEnd: -85,
+  lamellaCount: 16,
+  lamellaDepth: 0.001,
   
-  segmentOuterRadius: 1.0, // New
-  segmentInnerRadius: 0.99, // New (Matches default core depth)
+  segmentOuterRadius: 1, 
+  segmentInnerRadius: 1, 
   
   roughness: 0.2,
   metalness: 0.1,
