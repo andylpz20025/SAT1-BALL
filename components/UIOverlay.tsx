@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D, Lock, Unlock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D, Lock, Unlock, Eye, EyeOff } from 'lucide-react';
 import { ControlPanelProps } from '../types';
 import { DEFAULTS } from '../constants';
 
@@ -81,6 +81,9 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
   lightPreset, setLightPreset
 }) => {
     
+  // Visibility State
+  const [isVisible, setIsVisible] = useState(true);
+
   // Reset Handlers
   const resetGeneral = () => {
       setRotationSpeedX(DEFAULTS.rotationSpeedX);
@@ -158,8 +161,17 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
          </h1>
       </div>
 
+      {/* Toggle Visibility Button */}
+      <button 
+          onClick={() => setIsVisible(!isVisible)}
+          className="absolute top-6 right-6 pointer-events-auto bg-slate-900/80 hover:bg-slate-800 text-white p-2.5 rounded-full border border-slate-600 transition-all shadow-lg z-50 group"
+          title={isVisible ? "Menü ausblenden" : "Menü anzeigen"}
+      >
+          {isVisible ? <EyeOff className="w-5 h-5 text-slate-400 group-hover:text-white" /> : <Settings2 className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />}
+      </button>
+
       {/* Main Control Panel - Widened to md:w-[450px] */}
-      <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/50 p-5 rounded-2xl shadow-2xl w-[95%] mx-auto md:w-[450px] md:mx-0 pointer-events-auto max-h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600">
+      <div className={`bg-slate-900/90 backdrop-blur-md border border-slate-700/50 p-5 rounded-2xl shadow-2xl w-[95%] mx-auto md:w-[450px] md:mx-0 pointer-events-auto max-h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 transition-all duration-300 ${isVisible ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-95 translate-x-8 pointer-events-none hidden'}`}>
         
         <div className="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
           <Settings2 className="w-5 h-5 text-cyan-400" />
