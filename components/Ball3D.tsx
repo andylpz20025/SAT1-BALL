@@ -3,16 +3,13 @@ import { useFrame } from '@react-three/fiber';
 import { Group, DoubleSide, MathUtils, Color, MeshPhysicalMaterial } from 'three';
 import { LamellaData } from '../types';
 
-// Add type definitions for R3F elements
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       group: any;
       mesh: any;
       sphereGeometry: any;
-      meshStandardMaterial: any;
       meshPhysicalMaterial: any;
-      circleGeometry: any;
       ringGeometry: any;
     }
   }

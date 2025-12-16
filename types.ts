@@ -64,6 +64,23 @@ export interface SphereProps {
   
   // New: Light Presets
   lightPreset: 'studio' | 'cyberpunk' | 'sunset';
+
+  // NEW: Physics / Falling Balls
+  enablePhysics: boolean;
+  physicsActive: boolean; // Controls the actual drop start
+  physicsBallCount: number;
+  physicsGravity: number;
+  physicsBounciness: number;
+  physicsFriction: number; // NEW
+  physicsMass: number;     // NEW
+
+  // NEW: Floor Options
+  floorReflector: boolean;
+  floorShadows: boolean;
+  floorGrid: boolean;
+  floorColor: string;             // NEW
+  floorRoughness: number;         // NEW
+  floorReflectionStrength: number;// NEW
 }
 
 export interface ControlPanelProps {
@@ -182,4 +199,54 @@ export interface ControlPanelProps {
   // New: Light Preset Control
   lightPreset: 'studio' | 'cyberpunk' | 'sunset';
   setLightPreset: (val: 'studio' | 'cyberpunk' | 'sunset') => void;
+
+  // NEW: Physics Controls
+  enablePhysics: boolean;
+  setEnablePhysics: (val: boolean) => void;
+  physicsActive: boolean;
+  setPhysicsActive: (val: boolean) => void;
+  physicsBallCount: number;
+  setPhysicsBallCount: (val: number) => void;
+  physicsGravity: number;
+  setPhysicsGravity: (val: number) => void;
+  physicsBounciness: number;
+  setPhysicsBounciness: (val: number) => void;
+  physicsFriction: number;
+  setPhysicsFriction: (val: number) => void;
+  physicsMass: number;
+  setPhysicsMass: (val: number) => void;
+
+  // NEW: Floor Controls
+  floorReflector: boolean;
+  setFloorReflector: (val: boolean) => void;
+  floorShadows: boolean;
+  setFloorShadows: (val: boolean) => void;
+  floorGrid: boolean;
+  setFloorGrid: (val: boolean) => void;
+  floorColor: string;
+  setFloorColor: (val: string) => void;
+  floorRoughness: number;
+  setFloorRoughness: (val: number) => void;
+  floorReflectionStrength: number;
+  setFloorReflectionStrength: (val: number) => void;
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      ambientLight: any;
+      pointLight: any;
+      spotLight: any;
+      directionalLight: any;
+      group: any;
+      mesh: any;
+      sphereGeometry: any;
+      meshStandardMaterial: any;
+      meshPhysicalMaterial: any;
+      circleGeometry: any;
+      ringGeometry: any;
+      planeGeometry: any;
+      shadowMaterial: any;
+    }
+  }
 }

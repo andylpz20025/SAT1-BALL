@@ -1,20 +1,22 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, PerspectiveCamera, MeshReflectorMaterial, Grid } from '@react-three/drei';
 import { EffectComposer, Bloom, Noise, ChromaticAberration } from '@react-three/postprocessing';
 import Ball3D from './Ball3D';
+import { PhysicsBalls } from './PhysicsBalls'; // Import Physics Balls
 import { SphereProps } from '../types';
 import { Vector2 } from 'three';
 
-// Add type definitions for R3F elements
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       ambientLight: any;
       spotLight: any;
       pointLight: any;
-      group: any;
       directionalLight: any;
+      group: any;
+      planeGeometry: any;
+      shadowMaterial: any;
     }
   }
 }
@@ -23,6 +25,9 @@ declare global {
 interface SceneProps extends SphereProps {}
 
 const Scene: React.FC<SceneProps> = (props) => {
+  // Define floor level to match physics floor
+  const floorY = -3.0;
+
   return (
     <Canvas
       gl={{ antialias: true, toneMappingExposure: 1.0 }}
@@ -72,10 +77,66 @@ const Scene: React.FC<SceneProps> = (props) => {
         {/* Environment - Optional Background */}
         <Environment preset={props.lightPreset === 'sunset' ? 'sunset' : 'city'} blur={1} background={props.showEnvBackground} />
         
-        <group position={[0, 0, 0]}>
-            <Ball3D {...props} />
-        </group>
+        {/* Option 1: Reflector Floor */}
+        {props.floorReflector && (
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, floorY, 0]}>
+                <planeGeometry args={[50, 50]} />
+                <MeshReflectorMaterial
+                    blur={[300, 100]}
+                    resolution={1024}
+                    mixBlur={1}
+                    mixStrength={50}
+                    roughness={props.floorRoughness} // Use prop
+                    depthScale={1.2}
+                    minDepthThreshold={0.4}
+                    maxDepthThreshold={1.4}
+                    color={props.floorColor} // Use prop
+                    metalness={0.5}
+                    mirror={props.floorReflectionStrength} // Use prop
+                />
+            </mesh>
+        )}
+
+        {/* Option 2: Real Shadows Floor */}
+        {props.floorShadows && (
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, floorY + 0.01, 0]} receiveShadow>
+                <planeGeometry args={[100, 100]} />
+                <shadowMaterial transparent opacity={0.4} color={props.floorColor} />
+            </mesh>
+        )}
+
+        {/* Option 3: Grid */}
+        {props.floorGrid && (
+            <Grid 
+                position={[0, floorY + 0.02, 0]} 
+                args={[30, 30]} 
+                cellSize={1} 
+                cellThickness={1} 
+                cellColor="#6f6f6f" 
+                sectionSize={5} 
+                sectionThickness={1.5} 
+                sectionColor="#9d4b4b" 
+                fadeDistance={25} 
+                infiniteGrid 
+            />
+        )}
+
+        {/* 
+            Render Main Ball ONLY if physics is NOT active.
+            User requested "ball in middle is hidden" when physics start.
+        */}
+        {!props.physicsActive && (
+            <group position={[0, 0, 0]}>
+                <Ball3D {...props} />
+            </group>
+        )}
         
+        {/* Render Falling Balls (Physics) if Enabled in Menu */}
+        {props.enablePhysics && (
+           <PhysicsBalls {...props} />
+        )}
+        
+        {/* Default ContactShadows (Fake ambient shadow) - Always kept as base */}
         <ContactShadows 
             position={[0, -1.5, 0]} 
             opacity={0.5} 
@@ -106,7 +167,7 @@ const Scene: React.FC<SceneProps> = (props) => {
             enablePan={false} 
             enableZoom={true} 
             minDistance={2.5} 
-            maxDistance={12}
+            maxDistance={25} 
             autoRotate={false}
             dampingFactor={0.05}
         />

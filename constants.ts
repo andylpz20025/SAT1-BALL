@@ -1,4 +1,5 @@
 
+
 // The colors observed in the reference image (Sat.1 style ball)
 // Order provided by user
 export const BALL_COLORS = [
@@ -26,7 +27,7 @@ export const DEFAULTS = {
   rotationSpeedY: 1.5,
   rotationSpeedZ: 0,
   
-  expansion: 0.02,
+  expansion: 0,
   autoAnimate: true,
   animationType: 'breath' as const,
   hoverEffect: true,
@@ -75,7 +76,23 @@ export const DEFAULTS = {
   enableGlitch: false,
   showEnvBackground: false,
   
-  lightPreset: 'studio' as const
+  lightPreset: 'studio' as const,
+
+  // NEW: Physics Defaults
+  enablePhysics: false,
+  physicsBallCount: 5,
+  physicsGravity: 0.2,
+  physicsBounciness: 0.6,
+  physicsFriction: 0.5, // NEW
+  physicsMass: 1.0,     // NEW
+
+  // NEW: Floor Defaults
+  floorReflector: false,
+  floorShadows: false,
+  floorGrid: false,
+  floorColor: '#151515',        // NEW
+  floorRoughness: 1.0,          // NEW
+  floorReflectionStrength: 0.5  // NEW
 };
 
 export const ANIMATION_CONFIG = {

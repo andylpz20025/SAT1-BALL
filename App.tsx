@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import Scene from './components/Scene';
 import UIOverlay from './components/UIOverlay';
@@ -72,6 +73,23 @@ const App: React.FC = () => {
   const [coreVisible, setCoreVisible] = useState<boolean>(DEFAULTS.coreVisible);
   const [coreType, setCoreType] = useState<'solid' | 'segmented'>(DEFAULTS.coreType);
   
+  // Physics State
+  const [enablePhysics, setEnablePhysics] = useState<boolean>(DEFAULTS.enablePhysics);
+  const [physicsActive, setPhysicsActive] = useState<boolean>(false); // Start trigger
+  const [physicsBallCount, setPhysicsBallCount] = useState<number>(DEFAULTS.physicsBallCount);
+  const [physicsGravity, setPhysicsGravity] = useState<number>(DEFAULTS.physicsGravity);
+  const [physicsBounciness, setPhysicsBounciness] = useState<number>(DEFAULTS.physicsBounciness);
+  const [physicsFriction, setPhysicsFriction] = useState<number>(DEFAULTS.physicsFriction);
+  const [physicsMass, setPhysicsMass] = useState<number>(DEFAULTS.physicsMass);
+
+  // Floor State
+  const [floorReflector, setFloorReflector] = useState<boolean>(DEFAULTS.floorReflector);
+  const [floorShadows, setFloorShadows] = useState<boolean>(DEFAULTS.floorShadows);
+  const [floorGrid, setFloorGrid] = useState<boolean>(DEFAULTS.floorGrid);
+  const [floorColor, setFloorColor] = useState<string>(DEFAULTS.floorColor);
+  const [floorRoughness, setFloorRoughness] = useState<number>(DEFAULTS.floorRoughness);
+  const [floorReflectionStrength, setFloorReflectionStrength] = useState<number>(DEFAULTS.floorReflectionStrength);
+
   // Initialize colors excluding white
   const defaultPalette = BALL_COLORS.filter(c => c !== '#ffffff');
   
@@ -187,6 +205,21 @@ const App: React.FC = () => {
           enableGlitch={enableGlitch}
           showEnvBackground={showEnvBackground}
           lightPreset={lightPreset}
+
+          enablePhysics={enablePhysics}
+          physicsActive={physicsActive}
+          physicsBallCount={physicsBallCount}
+          physicsGravity={physicsGravity}
+          physicsBounciness={physicsBounciness}
+          physicsFriction={physicsFriction}
+          physicsMass={physicsMass}
+
+          floorReflector={floorReflector}
+          floorShadows={floorShadows}
+          floorGrid={floorGrid}
+          floorColor={floorColor}
+          floorRoughness={floorRoughness}
+          floorReflectionStrength={floorReflectionStrength}
         />
       </div>
 
@@ -298,6 +331,34 @@ const App: React.FC = () => {
 
           lightPreset={lightPreset}
           setLightPreset={setLightPreset}
+
+          enablePhysics={enablePhysics}
+          setEnablePhysics={setEnablePhysics}
+          physicsActive={physicsActive}
+          setPhysicsActive={setPhysicsActive}
+          physicsBallCount={physicsBallCount}
+          setPhysicsBallCount={setPhysicsBallCount}
+          physicsGravity={physicsGravity}
+          setPhysicsGravity={setPhysicsGravity}
+          physicsBounciness={physicsBounciness}
+          setPhysicsBounciness={setPhysicsBounciness}
+          physicsFriction={physicsFriction}
+          setPhysicsFriction={setPhysicsFriction}
+          physicsMass={physicsMass}
+          setPhysicsMass={setPhysicsMass}
+
+          floorReflector={floorReflector}
+          setFloorReflector={setFloorReflector}
+          floorShadows={floorShadows}
+          setFloorShadows={setFloorShadows}
+          floorGrid={floorGrid}
+          setFloorGrid={setFloorGrid}
+          floorColor={floorColor}
+          setFloorColor={setFloorColor}
+          floorRoughness={floorRoughness}
+          setFloorRoughness={setFloorRoughness}
+          floorReflectionStrength={floorReflectionStrength}
+          setFloorReflectionStrength={setFloorReflectionStrength}
         />
       </div>
     </div>

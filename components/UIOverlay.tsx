@@ -1,6 +1,7 @@
 
+
 import React, { useState } from 'react';
-import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D, Lock, Unlock, Eye, EyeOff } from 'lucide-react';
+import { Play, Pause, Settings2, RotateCw, RotateCcw, Monitor, Scissors, Layers, Palette, Rotate3D, Sparkles, Box, Wand2, Activity, Fingerprint, Sun, Zap, Camera, TimerReset, Undo2, Move3D, Lock, Unlock, Eye, EyeOff, ArrowDownCircle, RefreshCw, Grid as GridIcon } from 'lucide-react';
 import { ControlPanelProps } from '../types';
 import { DEFAULTS } from '../constants';
 
@@ -78,7 +79,22 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
   enableGlitch, setEnableGlitch,
   showEnvBackground, setShowEnvBackground,
 
-  lightPreset, setLightPreset
+  lightPreset, setLightPreset,
+
+  enablePhysics, setEnablePhysics,
+  physicsActive, setPhysicsActive,
+  physicsBallCount, setPhysicsBallCount,
+  physicsGravity, setPhysicsGravity,
+  physicsBounciness, setPhysicsBounciness,
+  physicsFriction, setPhysicsFriction,
+  physicsMass, setPhysicsMass,
+
+  floorReflector, setFloorReflector,
+  floorShadows, setFloorShadows,
+  floorGrid, setFloorGrid,
+  floorColor, setFloorColor,
+  floorRoughness, setFloorRoughness,
+  floorReflectionStrength, setFloorReflectionStrength
 }) => {
     
   // Visibility State
@@ -104,6 +120,13 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
       setLightPreset(DEFAULTS.lightPreset);
       setBackgroundColor(DEFAULTS.backgroundColor);
       setShowEnvBackground(DEFAULTS.showEnvBackground);
+      // Reset floor defaults
+      setFloorReflector(DEFAULTS.floorReflector);
+      setFloorShadows(DEFAULTS.floorShadows);
+      setFloorGrid(DEFAULTS.floorGrid);
+      setFloorColor(DEFAULTS.floorColor);
+      setFloorRoughness(DEFAULTS.floorRoughness);
+      setFloorReflectionStrength(DEFAULTS.floorReflectionStrength);
   };
 
   const resetEffects = () => {
@@ -112,6 +135,16 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
       setEnableNoise(DEFAULTS.enableNoise);
       setNoiseOpacity(DEFAULTS.noiseOpacity);
       setEnableGlitch(DEFAULTS.enableGlitch);
+  };
+  
+  const resetPhysics = () => {
+      setEnablePhysics(DEFAULTS.enablePhysics);
+      setPhysicsBallCount(DEFAULTS.physicsBallCount);
+      setPhysicsGravity(DEFAULTS.physicsGravity);
+      setPhysicsBounciness(DEFAULTS.physicsBounciness);
+      setPhysicsFriction(DEFAULTS.physicsFriction);
+      setPhysicsMass(DEFAULTS.physicsMass);
+      setPhysicsActive(false);
   };
 
   const resetGeometry = () => {
@@ -275,7 +308,7 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
             </button>
         </div>
 
-        {/* Section: Animation & Interaction (New) */}
+        {/* Section: Animation & Interaction */}
         <div className="mb-6 border-t border-slate-700 pt-4 relative">
              <button onClick={resetAnimation} className="absolute top-4 right-0 text-slate-500 hover:text-white transition-colors" title="Abschnitt zurücksetzen"><Undo2 className="w-4 h-4" /></button>
             <div className="flex items-center gap-2 mb-3">
@@ -308,6 +341,99 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
                 />
             </div>
         </div>
+
+         {/* Section: Physics (NEW) */}
+         <div className="mb-6 border-t border-slate-700 pt-4 relative">
+             <button onClick={resetPhysics} className="absolute top-4 right-0 text-slate-500 hover:text-white transition-colors" title="Abschnitt zurücksetzen"><Undo2 className="w-4 h-4" /></button>
+             <div className="flex items-center gap-2 mb-3">
+                <ArrowDownCircle className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-sm font-bold text-white">Physik & Bälle</h3>
+            </div>
+            
+            <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                <div className="flex items-center justify-between mb-3">
+                    <label className="text-[10px] text-slate-400 font-bold">Fallende Bälle aktivieren</label>
+                    <input 
+                        type="checkbox" 
+                        checked={enablePhysics} 
+                        onChange={(e) => setEnablePhysics(e.target.checked)}
+                        className="w-4 h-4 rounded border-slate-600 bg-slate-800 accent-cyan-500 cursor-pointer"
+                    />
+                </div>
+                
+                {enablePhysics && (
+                    <div className="space-y-3 pl-2 border-l border-slate-700">
+                        {/* Start Button */}
+                        <button
+                            onClick={() => setPhysicsActive(!physicsActive)}
+                            className={`w-full flex items-center justify-center gap-2 py-2 mb-2 rounded-lg text-sm font-bold transition-all shadow-md ${
+                                physicsActive ? 'bg-red-600/80 hover:bg-red-500 text-white' : 'bg-cyan-600 hover:bg-cyan-500 text-white'
+                            }`}
+                        >
+                            {physicsActive ? (
+                                <>
+                                    <RefreshCw className="w-4 h-4" /> Reset / Stop
+                                </>
+                            ) : (
+                                <>
+                                    <ArrowDownCircle className="w-4 h-4" /> BÄLLE FALLEN LASSEN
+                                </>
+                            )}
+                        </button>
+
+                        <div className={`transition-opacity duration-300 ${physicsActive ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                             <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                                <span>Anzahl Bälle</span>
+                                <span className="font-mono text-cyan-400">{physicsBallCount}</span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                {/* Increased max range to 200, but text input allows more */}
+                                <input type="range" min="1" max="200" step="1" value={physicsBallCount} onChange={(e) => setPhysicsBallCount(parseInt(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                                <input type="number" value={physicsBallCount} onChange={(e) => setPhysicsBallCount(parseInt(e.target.value))} className="w-14 bg-slate-800 text-[10px] text-white border border-slate-600 rounded px-1 py-0.5 text-center font-mono" />
+                            </div>
+                        </div>
+
+                         <div className={`${physicsActive ? 'opacity-50 pointer-events-none' : ''}`}>
+                             <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                                <span>Schwerkraft</span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <input type="range" min="0.05" max="1" step="0.05" value={physicsGravity} onChange={(e) => setPhysicsGravity(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                            </div>
+                        </div>
+
+                         <div className={`${physicsActive ? 'opacity-50 pointer-events-none' : ''}`}>
+                             <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                                <span>Sprungkraft</span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <input type="range" min="0" max="1.5" step="0.1" value={physicsBounciness} onChange={(e) => setPhysicsBounciness(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                            </div>
+                        </div>
+                        
+                        {/* Friction */}
+                        <div className={`${physicsActive ? 'opacity-50 pointer-events-none' : ''}`}>
+                             <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                                <span>Reibung (Boden)</span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <input type="range" min="0" max="1" step="0.1" value={physicsFriction} onChange={(e) => setPhysicsFriction(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                            </div>
+                        </div>
+
+                         {/* Mass */}
+                        <div className={`${physicsActive ? 'opacity-50 pointer-events-none' : ''}`}>
+                             <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+                                <span>Gewicht (Masse-Faktor)</span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <input type="range" min="0.1" max="5" step="0.1" value={physicsMass} onChange={(e) => setPhysicsMass(parseFloat(e.target.value))} className="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+         </div>
 
         {/* Section: Environment */}
         <div className="mb-6 border-t border-slate-700 pt-4 relative">
@@ -350,7 +476,7 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
                     />
                 </div>
             </div>
-             <div className="flex items-center justify-between">
+             <div className="flex items-center justify-between mb-3">
                 <label className="text-[10px] text-slate-400">Zeige HDRI Hintergrund</label>
                 <input 
                     type="checkbox" 
@@ -359,9 +485,48 @@ const UIOverlay: React.FC<ControlPanelProps> = ({
                     className="w-4 h-4 rounded border-slate-600 bg-slate-800 accent-cyan-500 cursor-pointer"
                 />
             </div>
+            
+            {/* New Floor Section */}
+            <div className="bg-slate-800/30 p-2 rounded border border-slate-700/30">
+                <div className="flex items-center gap-2 mb-2">
+                    <GridIcon className="w-3 h-3 text-cyan-400" />
+                    <span className="text-xs font-bold text-slate-200">BODEN & GRUND</span>
+                </div>
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                        <label className="text-[10px] text-slate-400">1. Reflektor-Boden</label>
+                        <input type="checkbox" checked={floorReflector} onChange={(e) => setFloorReflector(e.target.checked)} className="w-4 h-4 rounded border-slate-600 bg-slate-800 accent-cyan-500 cursor-pointer" />
+                    </div>
+                    {floorReflector && (
+                        <div className="pl-2 border-l border-slate-700 space-y-2 mb-2">
+                            <div className="flex items-center justify-between">
+                                <label className="text-[9px] text-slate-500">Farbe</label>
+                                <input type="color" value={floorColor} onChange={(e) => setFloorColor(e.target.value)} className="w-4 h-4 rounded border-none p-0 bg-transparent cursor-pointer" />
+                            </div>
+                             <div className="flex items-center gap-2">
+                                <label className="text-[9px] text-slate-500 w-12">Mattierung</label>
+                                <input type="range" min="0" max="5" step="0.1" value={floorRoughness} onChange={(e) => setFloorRoughness(parseFloat(e.target.value))} className="flex-1 h-1 bg-slate-700 rounded appearance-none cursor-pointer accent-cyan-500" />
+                            </div>
+                             <div className="flex items-center gap-2">
+                                <label className="text-[9px] text-slate-500 w-12">Spiegelung</label>
+                                <input type="range" min="0" max="1" step="0.05" value={floorReflectionStrength} onChange={(e) => setFloorReflectionStrength(parseFloat(e.target.value))} className="flex-1 h-1 bg-slate-700 rounded appearance-none cursor-pointer accent-cyan-500" />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex items-center justify-between">
+                        <label className="text-[10px] text-slate-400">2. Echte Schatten (Ebene)</label>
+                         <input type="checkbox" checked={floorShadows} onChange={(e) => setFloorShadows(e.target.checked)} className="w-4 h-4 rounded border-slate-600 bg-slate-800 accent-cyan-500 cursor-pointer" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <label className="text-[10px] text-slate-400">3. Grid (Gitter)</label>
+                         <input type="checkbox" checked={floorGrid} onChange={(e) => setFloorGrid(e.target.checked)} className="w-4 h-4 rounded border-slate-600 bg-slate-800 accent-cyan-500 cursor-pointer" />
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {/* Section: Effects (Post Processing - New) */}
+        {/* Section: Effects (Post Processing) */}
         <div className="mb-6 border-t border-slate-700 pt-4 relative">
              <button onClick={resetEffects} className="absolute top-4 right-0 text-slate-500 hover:text-white transition-colors" title="Abschnitt zurücksetzen"><Undo2 className="w-4 h-4" /></button>
              <div className="flex items-center gap-2 mb-3">
